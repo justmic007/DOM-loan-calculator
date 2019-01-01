@@ -1,8 +1,18 @@
 // Listen for submit
-document.getElementById('loan-form').addEventListener('submit', calculateResults);
+document.getElementById('loan-form').addEventListener('submit', function(e){
+  // Hide results
+  document.getElementById('results').style.display = 'none';
+
+  // Show loader as soon as the submit button is clicked
+  document.getElementById('loading').style.display = 'block';
+  setTimeout(calculateResults, 2000);
+
+
+  e.preventDefault();
+});
 
 // Calculate Results
-function calculateResults(e) {
+function calculateResults() {
   // console.log('Calculate Results');
   // Grab all the UI variables
   const amount = document.getElementById('amount');
@@ -26,17 +36,29 @@ function calculateResults(e) {
     monthlyPayment.value = monthly.toFixed(2);
     totalPayment.value = (monthly * calculatedPayments).toFixed(2);
     totalInterest.value = ((monthly*calculatedPayments)-principal).toFixed(2);
+    
+    // Show results
+    document.getElementById('results').style.display = 'block';
+
+    // Hide the loader
+    document.getElementById('loading').style.display = 'none';
+
 
   } else {
   // Build a custom error instead of just showing the error
     showError('Please check your numbers');
-    
   }
-  e.preventDefault(); // prevents form default behaviour
 }
 
   // Show Error
   function showError(error){
+
+    // Hide loader
+    document.getElementById('loading').style.display = 'none';
+
+    // Hide results
+    document.getElementById('results').style.display = 'none';
+
     // Create a  div
     const errorDiv = document.createElement('div');
 
@@ -55,6 +77,7 @@ function calculateResults(e) {
 
     // Clear error after 3 seconds
     setTimeout(clearError, 3000);
+
   }
 
   // Clear error
